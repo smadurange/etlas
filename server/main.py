@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timedelta
-from pathlib import Path
 from threading import Lock
 
 import requests
@@ -8,9 +7,24 @@ from flask import Flask, request, Response
 
 app = Flask(__name__)
 
+def get_tickers():
+	tab = []
+
+	with open("tickers.txt", "r") as f:
+		lines = f.read().split('\n')
+		for line in lines:
+			if line:
+				parts = line.split()
+				tab.append({
+					"name": parts[0],
+					"price": parts[1]
+				})
+
+	return tab
+
 n = 0
 mtx = Lock()
-tickers = Path('tickers.txt').read_text().split("\n")
+tickers = get_tickers()
 
 @app.route("/stock-prices")
 def get_stock_prices():
@@ -18,7 +32,7 @@ def get_stock_prices():
 
 	auth_key = request.headers.get("x-api-key")
 	if auth_key != os.environ["ATLAS_API_KEY"]:
-		return Response("Unauthorized", status=401, mimetype="plain/txt")
+		return Response("Unauthorized\n", status=401, mimetype="plain/text")
 
 	api_key = os.environ["POLYGON_API_KEY"]
 	base = "https://api.polygon.io/v2/aggs/ticker"
@@ -28,17 +42,19 @@ def get_stock_prices():
 	s_date = (date - timedelta(days=30)).strftime("%Y-%m-%d")
 
 	with mtx:
-		ticker = tickers[n]
+		ticker = tickers[n]["name"]
+		price = tickers[n]["price"]
+		result = f"{ticker}\n{price}\n"
+
 		url = f"{base}/{ticker}/range/1/day/{s_date}/{e_date}?adjusted=true&sort=asc&apiKey={api_key}"
 		n = (n + 1) % len(tickers)
 
 		res = requests.get(url)
 
 		if res.status_code == 200:
-			txt = f"{ticker}\n"
 			data = res.json()
 			for item in data["results"]:
-				txt += f"{item['c']:.2f}\n"
-			return Response(txt, status=res.status_code, mimetype="plain/txt")
-		else:
-			return Response(res.txt, status=res.status_code, mimetype="plain/text")
+				result += f"{item['c']:.2f}\n"
+
+		return Response(result, status=res.status_code, mimetype="plain/text")
+
