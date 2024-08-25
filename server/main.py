@@ -16,6 +16,10 @@ tickers = Path('tickers.txt').read_text().split("\n")
 def get_stock_prices():
 	global n
 
+	auth_key = request.headers.get("x-api-key")
+	if auth_key != os.environ["ATLAS_API_KEY"]:
+		return Response("Unauthorized", status=401, mimetype="plain/txt")
+
 	api_key = os.environ["POLYGON_API_KEY"]
 	base = "https://api.polygon.io/v2/aggs/ticker"
 
