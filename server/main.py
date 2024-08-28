@@ -3,9 +3,13 @@ from datetime import datetime, timedelta
 from threading import Lock
 
 import requests
+from passlib.hash import pbkdf2_sha256
 from flask import Flask, request, Response
 
 app = Flask(__name__)
+
+pwd = os.environ["ATLAS_KEY_HASH"]
+api_key = os.environ["POLYGON_API_KEY"]
 
 def get_tickers():
 	tab = []
@@ -31,10 +35,12 @@ def get_stock_prices():
 	global n
 
 	auth_key = request.headers.get("x-api-key")
-	if auth_key != os.environ["ATLAS_API_KEY"]:
-		return Response("Unauthorized\n", status=401, mimetype="plain/text")
 
-	api_key = os.environ["POLYGON_API_KEY"]
+	if not pbkdf2_sha256.verify(auth_key, pwd):
+		return Response("Unauthorized\n",
+			status=401,
+			mimetype="plain/text")
+
 	base = "https://api.polygon.io/v2/aggs/ticker"
 
 	date = datetime.today()
