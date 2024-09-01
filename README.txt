@@ -3,7 +3,7 @@ ATLAS.FCGI
 The atlas.fcgi file defines a FastCGI backend for Atlas. Follow the steps below to 
 deploy Atlas to an OpenBSD server using httpd.
 
-  1. Install flask and flup Python packages. 
+  1. Install flask, flup, and requests Python packages. 
   2. Create directory $HOME/atlas.
   3. Copy atlas.fcgi and tickers.txt to $HOME/atlas.
   4. Set the POLYGON_API_KEY environment variable: $ export POLYGON_API_KEY=<api-key>
