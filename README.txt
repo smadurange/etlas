@@ -24,5 +24,6 @@ deploy Atlas to an OpenBSD server using httpd.
   8. Create a user for the API: # htpasswd /var/www/htdocs/atlas/.htpasswd <username>
   9. Set read-only permissions to .htpasswd: 
        # chown www /var/www/htdocs/atlas/.htpasswd
+       # chgrp www /var/www/htdocs/atlas/.htpasswd
        # chmod u-w /var/www/htdocs/atlas/.htpasswd
   10. Start httpd: # rcctl -f start httpd 
