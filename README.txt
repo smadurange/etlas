@@ -9,7 +9,7 @@ deploy Atlas to an OpenBSD server using httpd.
   2. Copy the tickers.txt file to /var/www/cgi-bin/atlas and make sure that the
      file is readable (-rw-r--r--).
   3. Set the POLYGON_API_KEY environment variable.
-  4. Run the FastCGI script: $ nohup python3 /var/www/cgi-bin/atlas/atlas/fcgi &
+  4. Start FastCGI server: $ nohup python3 /var/www/cgi-bin/atlas/atlas.fcgi &
   5. Add the following configuration to httpd.conf:
      server "<server-name>" {
          listen on * port <port>
