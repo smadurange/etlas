@@ -1,5 +1,8 @@
+#!/usr/local/bin/python3
+
 import os
 from datetime import datetime, timedelta
+from pathlib import Path
 from threading import Lock
 
 import requests
@@ -63,3 +66,11 @@ def get_stock_prices():
 
 		return Response(result, status=res.status_code, mimetype="text/plain")
 
+if __name__ == '__main__':
+    from flup.server.fcgi import WSGIServer
+    sock = Path('/var/www/run/atlas.sock').resolve()
+    try:
+        sock.unlink()
+    except:
+        pass
+    WSGIServer(app, bindAddress=str(sock), umask=0o007).run()
