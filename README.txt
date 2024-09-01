@@ -15,7 +15,7 @@ deploy Atlas to an OpenBSD server using httpd.
      server "<server-name>" {
          listen on * tls port 443
 
-         # tls config: refer to OpenBSD man pages
+         # rest of the tls config - see man pages
 
          location "/prices" {
              authenticate with "/htdocs/atlas/.htpasswd"
