@@ -13,12 +13,23 @@ deploy Atlas to an OpenBSD server using httpd.
      # chgrp www /var/www/run/atlas.sock
   7. Add the following configuration to httpd.conf:
      server "<server-name>" {
-         listen on * port <port>
+         listen on * tls port 443
+
+         # tls config: refer to OpenBSD man pages
+
          location "/prices" {
              authenticate with "/htdocs/atlas/.htpasswd"
              fastcgi {
                  socket "/run/atlas.sock"
              }
+         }
+     }
+
+     server "<server-name>" {
+         # redirect http to https
+         listen on * port 80
+         locaion "/prices" {
+             block return 301 "https://$HTTP_HOST$REQUEST_URI"
          }
      }
   8. Create a user for the API: # htpasswd /var/www/htdocs/atlas/.htpasswd <username>
