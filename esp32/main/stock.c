@@ -157,11 +157,13 @@ void stock_get_data(struct stock_data *sd)
 void stock_init(void)
 {
 	esp_http_client_config_t conf = {
-		.url = CONFIG_STOCK_URL,
+		.url = CONFIG_STOCK_API_URL,
 		.is_async = true,
 		.timeout_ms = 5000,
 		.event_handler = http_evt_handler,
 		.disable_auto_redirect = true,
+		.auth_type = HTTP_AUTH_TYPE_BASIC,
+		.max_authorization_retries = -1
 	};
 
 	http_client = esp_http_client_init(&conf);

@@ -47,7 +47,7 @@ def get_stock_prices():
 
 		date = datetime.today()
 		e_date = date.strftime("%Y-%m-%d")
-		s_date = (date - timedelta(days=30)).strftime("%Y-%m-%d")
+		s_date = (date - timedelta(days=90)).strftime("%Y-%m-%d")
 
 		base = "https://api.polygon.io/v2/aggs/ticker"
 		url = f"{base}/{ticker}/range/1/day/{s_date}/{e_date}?adjusted=true&sort=asc&apiKey={api_key}"

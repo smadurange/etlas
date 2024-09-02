@@ -26,20 +26,8 @@ menu "EPD Configuration"
 
     config STOCK_API_URL
         string "URL of the stock data API"
-        default ""
+        default "https://user:pass@example.com/stocks"
         help
-            API username for the stock market data.
-
-    config STOCK_API_USER
-        string "User name for basic auth"
-        default ""
-        help
-            API username for the stock market data.
-
-    config STOCK_API_PASS
-        string "Password for basic auth"
-        default ""
-        help
-            API password for the stock market data.
+            URL with basic auth credentials.
 
 endmenu
