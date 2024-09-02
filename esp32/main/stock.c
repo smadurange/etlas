@@ -130,11 +130,14 @@ static inline void parse(char *s, struct stock_data *sd)
 
 	if (*s)
 		s++;
-
+	
 	for (i = 0; *s && *s != '\n' && i < sd->prices_maxlen; i++) {
 		sd->prices[i] = get_price_value(&s, buf_p, n);
 		sd->price_min = min(sd->prices[i], sd->price_min);
 		sd->price_max = max(sd->prices[i], sd->price_max);
+
+		if (*s)
+			s++;
 	}
 
 	sd->prices_len = i;
