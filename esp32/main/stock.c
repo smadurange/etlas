@@ -139,8 +139,8 @@ static inline void parse(char *s, struct stock_data *sd)
 	sd->prices_len = i;
 
 	// set dummy value
-	if (sd->prices_ref == 0)
-		sd->prices_ref = sd->prices_max + 1;
+	if (sd->price_ref == 0)
+		sd->price_ref = sd->price_max + 1;
 }
 
 void stock_get_data(struct stock_data *sd)
