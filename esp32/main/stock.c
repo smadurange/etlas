@@ -96,15 +96,15 @@ static inline int get_price_value(char *s, int *n) {
 	const int buflen = 10;
 	char buf[buflen];
 
-	for (i = *n; j = 0, dp = 0; s[i] && s[i] != '\n'; i++) {
-		if (isdigit(s[i])) {
+	for (i = *n, j = 0, dp = 0; s[i] != '\n' && s[i] != '\0'; i++) {
+		if (isdigit((int) s[i])) {
 			if (j < buflen && dp <= 2)
 				buf[j++]= s[i];
 		}
 		else if (s[i] == '.')
 			dp++;
 		else
-			LOGE(TAG, "invalid characer in price value", s[i]);
+			ESP_LOGE(TAG, "invalid characer %c in price value", s[i]);
 	}
 	
 	buf[j] = '\0';
@@ -127,13 +127,13 @@ static inline void parse(char *s, struct stock_data *sd)
 	sd->ticker[i] = '\0';
 	sd->price_ref = get_price_value(s, &n);
 
-	for (i = 0; s[n] && i < sd->period; i++) {
+	for (i = 0; s[n] && i < sd->prices_maxlen; i++) {
 		sd->prices[i] = get_price_value(s, &n);
 		sd->price_min = min(sd->prices[i], sd->price_min);
 		sd->price_max = max(sd->prices[i], sd->price_max);
 	}
 
-	sd->prices[i] = 0;
+	sd->prices_len = i;
 }
 
 void stock_get_data(struct stock_data *sd)

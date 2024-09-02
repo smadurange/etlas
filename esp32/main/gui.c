@@ -909,12 +909,12 @@ int gui_draw_str(struct scrn *sc, const char *s, int x0, int y0, int x_max, int 
 	return y + sp.height;
 } 
 
-void gui_plot_stocks(struct scrn *sc, struct stock_item *data)
+void gui_plot_stocks(struct scrn *sc, struct stock_data *data)
 {
 	int x_min = 18, x_max = 310;
 	int y_min = 92, y_max = 356;
 
-	gui_draw_str(sc, data->name, x_min, 43, x_max, y_max, 0);
+	gui_draw_str(sc, data->ticker, x_min, 43, x_max, y_max, 0);
 
 	int col_n = x_max - x_min;
 	int row_n = y_max - y_min;

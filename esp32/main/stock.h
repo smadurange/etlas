@@ -9,7 +9,8 @@ struct stock_data {
 	int price_min;
 	int price_max;
 	int price_ref;
-	int period;
+	int prices_len;
+	int prices_maxlen;
 };
 
 void stock_init(void);
