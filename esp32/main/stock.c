@@ -119,6 +119,8 @@ static inline void parse(char *s, struct stock_data *sd)
 	sd->price_max = 0;
 	sd->price_min = INT_MAX;
 
+	ESP_LOGI(TAG, "%s", s);
+
 	for (i = 0, n = 0; s[n] && s[n] != '\n'; n++) {
 		if (i < TICKER_LEN)
 			sd->ticker[i++] = s[n];
@@ -128,7 +130,7 @@ static inline void parse(char *s, struct stock_data *sd)
 	sd->ticker[i] = '\0';
 	sd->price_ref = get_price_value(s, &n);
 
-	for (i = 0; s[++n] && i < sd->prices_maxlen; i++, n++) {
+	for (i = 0, n++; s[n] && s[n] != '\n' && i < sd->prices_maxlen; i++, n++) {
 		sd->prices[i] = get_price_value(s, &n);
 		sd->price_min = min(sd->prices[i], sd->price_min);
 		sd->price_max = max(sd->prices[i], sd->price_max);
