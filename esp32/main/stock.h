@@ -1,17 +1,20 @@
 #ifndef STOCK_H
 #define STOCK_H
 
-struct stock_item {
-	char *name;
+#define TICKER_LEN 10
+#define PRICE_VAL_LEN 10
+#define PRICE_DATA_LEN 90
+
+struct stock_data {
+	char ticker[TICKER_LEN];
 	int *prices;
 	int price_min;
 	int price_max;
 	int price_ref;
-	int prices_len;
 };
 
 void stock_init(void);
 
-struct stock_item *stock_get_item(void);
+void stock_get_data(struct stock_data *sd);
 
 #endif /* STOCK_H */

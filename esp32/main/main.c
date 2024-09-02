@@ -22,10 +22,12 @@ void app_main(void)
 {
 	time_t t;
 	char ts[20];
+
 	struct tm now;
 	struct scrn sc;
 	struct news_item *news;
-	struct stock_item *stock = NULL;
+
+	struct stock_data *sd;
 
 	int ntp_rc = 0;
 
@@ -57,9 +59,8 @@ void app_main(void)
 		gui_draw_humid(&sc);
 		gui_draw_date(&sc, &now);
 
-		stock = stock_get_item();
-		if (stock)
-			gui_plot_stocks(&sc, stock);
+		stock_get_data(&sd);
+		gui_plot_stocks(&sc, sd);
 
 		news = news_local_get();
 		if (news)
