@@ -35,10 +35,11 @@ void app_main(void)
 		stock_get_data(&stock);
 
 		ESP_LOGI(TAG, "stock: %s, price ref: %d", stock.ticker, stock.price_ref);
-		for (int i = 0; i < stock.prices_len && stock.prices[i] != 0; i++) {
+
+		for (int i = 0; i < stock.prices_len; i++) {
 			ESP_LOGI(TAG, "price: %d", stock.prices[i]);
 		}
 
-		vTaskDelay(5 * 60 * 1000 / portTICK_PERIOD_MS);	
+		vTaskDelay(1 * 30 * 1000 / portTICK_PERIOD_MS);	
 	}
 }
