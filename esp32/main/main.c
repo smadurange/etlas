@@ -27,7 +27,9 @@ void app_main(void)
 	struct scrn sc;
 	struct news_item *news;
 
-	struct stock_data *sd;
+	struct stock_data stock;
+	stock.period = 90; /* days  */
+	stock.prices = malloc(sizeof(int) * (sd.period + 1));
 
 	int ntp_rc = 0;
 
@@ -59,8 +61,8 @@ void app_main(void)
 		gui_draw_humid(&sc);
 		gui_draw_date(&sc, &now);
 
-		stock_get_data(&sd);
-		gui_plot_stocks(&sc, sd);
+		stock_get_data(&stock);
+		gui_plot_stocks(&sc, stock);
 
 		news = news_local_get();
 		if (news)

@@ -114,7 +114,7 @@ static inline int get_price_value(char *s, int *n) {
 
 static inline void parse(char *s, struct stock_data *sd)
 {
-	int i, dp, n;
+	int i, n;
 
 	sd->price_max = 0;
 	sd->price_min = INT_MAX;

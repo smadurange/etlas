@@ -2,8 +2,6 @@
 #define STOCK_H
 
 #define TICKER_LEN 10
-#define PRICE_VAL_LEN 10
-#define PRICE_DATA_LEN 90
 
 struct stock_data {
 	char ticker[TICKER_LEN];
@@ -11,6 +9,7 @@ struct stock_data {
 	int price_min;
 	int price_max;
 	int price_ref;
+	int period;
 };
 
 void stock_init(void);
