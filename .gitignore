@@ -1,5 +1,6 @@
 # Config
 **/tickers.txt
+**/Kconfig.projbuild
 
 # Vim
 **/*.swp

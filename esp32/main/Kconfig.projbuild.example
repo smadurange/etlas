@@ -24,106 +24,22 @@ menu "EPD Configuration"
         help
             Hostname of the main SNTP server.
 
-    config STOCK_API_KEY
-        string "Stock data API key"
+    config STOCK_API_URL
+        string "URL of the stock data API"
         default ""
         help
-            API key for the stock market data API.
+            API username for the stock market data.
 
-    config STOCK_SYM_1
-        string "Stock name"
+    config STOCK_API_USER
+        string "User name for basic auth"
         default ""
         help
-            Stock symbol.
+            API username for the stock market data.
 
-    config STOCK_SYM_2
-        string "Stock name"
+    config STOCK_API_PASS
+        string "Password for basic auth"
         default ""
         help
-            Stock symbol.
-
-    config STOCK_SYM_3
-        string "Stock name"
-        default ""
-        help
-            Stock symbol.
-
-    config STOCK_SYM_4
-        string "Stock name"
-        default ""
-        help
-            Stock symbol.
-
-    config STOCK_SYM_5
-        string "Stock name"
-        default ""
-        help
-            Stock symbol.
-
-    config STOCK_SYM_6
-        string "Stock name"
-        default ""
-        help
-            Stock symbol.
-
-    config STOCK_SYM_7
-        string "Stock name"
-        default ""
-        help
-            Stock symbol.
-
-    config STOCK_SYM_8
-        string "Stock name"
-        default ""
-        help
-            Stock symbol.
-
-    config STOCK_PRICE_1
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
-
-    config STOCK_PRICE_2
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
-
-    config STOCK_PRICE_3
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
-
-    config STOCK_PRICE_4
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
-
-    config STOCK_PRICE_5
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
-
-    config STOCK_PRICE_6
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
-
-    config STOCK_PRICE_7
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
-
-    config STOCK_PRICE_8
-        int "Stock price"
-        default 0
-        help
-            Stock price as an integer.
+            API password for the stock market data.
 
 endmenu
