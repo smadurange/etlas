@@ -91,56 +91,59 @@ static inline int max(int a, int b) {
 	return a > b ? a : b;
 }
 
-static inline int get_price_value(char *s, int *n) {
-	int i, j, dp;
-	const int buflen = 10;
-	char buf[buflen];
+static inline int get_price_value(const char *s, char *raw_s, int *n) {
+	int i, j, k;
+	char buf[TICKER_LEN];
 
-	for (i = *n, j = 0, dp = 0; s[i] && s[i] != '\n'; i++) {
-		if (isdigit((int) s[i])) {
-			if (j < buflen && dp <= 2)
-				buf[j++]= s[i];
-		}
-		else if (s[i] == '.')
-			dp++;
-		else
-			ESP_LOGE(TAG, "invalid characer %c in price value", s[i]);
+	i = *n;
+	j = k = 0;
+
+	while (s[i] && s[i] != '\n' && k < TICKER_LEN) {
+		if (s[i] != '.')
+			buf[j++] = s[i];
+
+		if (raw_s != NULL)
+			raw_s[k++] = s[i++];
 	}
-	
-	buf[j] = '\0';
+
 	*n = i;
+	buf[j] = '\0';
+
+	if (raw_s != NULL)
+		raw_s[k] = '\0';
+
 	return atoi(buf);
 }
 
 static inline void parse(char *s, struct stock_data *sd)
 {
 	int i, n;
+	char tick_raw[TICKER_LEN];
+	char price_raw[TICKER_LEN];
 
 	sd->price_max = 0;
 	sd->price_min = INT_MAX;
 
-	ESP_LOGI(TAG, "%s", s);
-
 	for (i = 0, n = 0; s[n] && s[n] != '\n'; n++) {
 		if (i < TICKER_LEN)
-			sd->ticker[i++] = s[n];
+			tick_raw[i++] = s[n];
 	}
 
 	n++;
 	sd->ticker[i] = '\0';
-	sd->price_ref = get_price_value(s, &n);
+	sd->price_ref = get_price_value(s, NULL, &n);
 
 	for (i = 0, n++; s[n] && s[n] != '\n' && i < sd->prices_maxlen; i++, n++) {
-		sd->prices[i] = get_price_value(s, &n);
+		sd->prices[i] = get_price_value(s, price_raw, &n);
 		sd->price_min = min(sd->prices[i], sd->price_min);
 		sd->price_max = max(sd->prices[i], sd->price_max);
 	}
 
 	sd->prices_len = i;
-
-	// set dummy value
 	if (sd->price_ref == 0)
 		sd->price_ref = sd->price_max + 1;
+
+	snprintf(sd->ticker, TICKER_LEN, "%s: %s", tick_raw, price_raw);
 }
 
 void stock_get_data(struct stock_data *sd)

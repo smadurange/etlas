@@ -1,7 +1,7 @@
 #ifndef STOCK_H
 #define STOCK_H
 
-#define TICKER_LEN 10
+#define TICKER_LEN 25
 
 struct stock_data {
 	char ticker[TICKER_LEN];
