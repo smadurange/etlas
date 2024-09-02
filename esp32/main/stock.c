@@ -12,6 +12,8 @@
 
 #include "stock.h"
 
+#define PRICE_LEN 15
+
 static char* TAG = "stock";
 static esp_http_client_handle_t http_client;
 
@@ -93,12 +95,12 @@ static inline int max(int a, int b) {
 
 static inline int get_price_value(const char *s, char *raw_s, int *n) {
 	int i, j, k;
-	char buf[TICKER_LEN];
+	char buf[PRICE_LEN];
 
 	i = *n;
 	j = k = 0;
 
-	while (s[i] && s[i] != '\n' && k < TICKER_LEN) {
+	while (s[i] && s[i] != '\n' && k < PRICE_LEN) {
 		if (s[i] != '.')
 			buf[j++] = s[i];
 
@@ -118,8 +120,9 @@ static inline int get_price_value(const char *s, char *raw_s, int *n) {
 static inline void parse(char *s, struct stock_data *sd)
 {
 	int i, n;
-	char tick_raw[TICKER_LEN];
-	char price_raw[TICKER_LEN];
+
+	char tick_raw[TICKER_LEN - PRICE_LEN];
+	char price_raw[PRICE_LEN - 1];
 
 	sd->price_max = 0;
 	sd->price_min = INT_MAX;
