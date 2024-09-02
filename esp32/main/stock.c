@@ -93,60 +93,56 @@ static inline int max(int a, int b) {
 	return a > b ? a : b;
 }
 
-static inline int get_price_value(const char *s, char *raw_s, int *n) {
-	int i, j, k;
-	char buf[PRICE_LEN];
+static inline int get_price_value(char **s, char *buf, int n) {
+	int i;
 
-	i = *n;
-	j = k = 0;
-
-	while (s[i] && s[i] != '\n' && k < PRICE_LEN) {
-		if (s[i] != '.')
-			buf[j++] = s[i];
-
-		if (raw_s != NULL)
-			raw_s[k++] = s[i++];
+	for (i = 0; **s && **s != '\n'; (*s)++) {
+		if (i < n - 1)
+			buf[i++] = **s;
 	}
 
-	*n = i;
-	buf[j] = '\0';
-
-	if (raw_s != NULL)
-		raw_s[k] = '\0';
-
-	return atoi(buf);
+	buf[i] = '\0';
+	return (int)(atof(buf) * 100);
 }
 
 static inline void parse(char *s, struct stock_data *sd)
 {
-	int i, n;
+	int i;
+	const int n = 10;
 
-	char tick_raw[TICKER_LEN - PRICE_LEN];
-	char price_raw[PRICE_LEN - 1];
+	char buf_t[n];
+	char buf_p[n];
 
 	sd->price_max = 0;
 	sd->price_min = INT_MAX;
 
-	for (i = 0, n = 0; s[n] && s[n] != '\n'; n++) {
-		if (i < TICKER_LEN)
-			tick_raw[i++] = s[n];
+	for (i = 0; *s && *s != '\n'; s++) {
+		if (i < n - 1)
+			buf_t[i++] = *s;
 	}
 
-	n++;
-	sd->ticker[i] = '\0';
-	sd->price_ref = get_price_value(s, NULL, &n);
+	buf_t[i] = '\0';
 
-	for (i = 0, n++; s[n] && s[n] != '\n' && i < sd->prices_maxlen; i++, n++) {
-		sd->prices[i] = get_price_value(s, price_raw, &n);
+	if (*s)
+		s++;
+
+	sd->price_ref = get_price_value(&s, buf_p, n);
+
+	if (*s)
+		s++;
+
+	for (i = 0; *s && *s != '\n' && i < sd->prices_maxlen; i++) {
+		sd->prices[i] = get_price_value(&s, buf_p, n);
 		sd->price_min = min(sd->prices[i], sd->price_min);
 		sd->price_max = max(sd->prices[i], sd->price_max);
 	}
 
 	sd->prices_len = i;
-	if (sd->price_ref == 0)
+
+	if (!sd->price_ref)
 		sd->price_ref = sd->price_max + 1;
 
-	snprintf(sd->ticker, TICKER_LEN, "%s: %s", tick_raw, price_raw);
+	snprintf(sd->ticker, TICKER_LEN, "%s: %s", buf_t, buf_p);
 }
 
 void stock_get_data(struct stock_data *sd)
