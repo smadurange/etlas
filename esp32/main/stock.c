@@ -124,9 +124,10 @@ static inline void parse(char *s, struct stock_data *sd)
 			sd->ticker[i++] = s[n];
 	}
 
+	sd->ticker[i] = '\0';
 	sd->price_ref = get_price_value(s, &n);
 
-	for (i = 0; s[n] && i < PRICE_DATA_LEN - 1; i++) {
+	for (i = 0; s[n] && i < sd->period; i++) {
 		sd->prices[i] = get_price_value(s, &n);
 		sd->price_min = min(sd->prices[i], sd->price_min);
 		sd->price_max = max(sd->prices[i], sd->price_max);
