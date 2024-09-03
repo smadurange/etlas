@@ -61,7 +61,8 @@ void app_main(void)
 		gui_draw_date(&sc, &now);
 
 		stock_get_data(&stock);
-		gui_plot_stocks(&sc, &stock);
+		if (stock.prices_len > 0)
+			gui_plot_stocks(&sc, &stock);
 
 		news = news_local_get();
 		if (news)
