@@ -20,9 +20,6 @@
 #define NEWS_FEED_UPDATED_BIT  BIT0
 #define MUTEX_TIMEOUT ((TickType_t) 5000 / portTICK_PERIOD_MS)
 
-extern const char news_cert_pem_start[] asm("_binary_news_cert_pem_start");
-extern const char news_cert_pem_end[]   asm("_binary_news_cert_pem_end");
-
 static const char* TAG = "news";
 
 static QueueHandle_t news_evt_queue;
@@ -339,7 +336,6 @@ void news_init(void)
 		.is_async = true,
 		.timeout_ms = 5000,
 		.event_handler = http_evt_handler,
-		.cert_pem = news_cert_pem_start,
 		.disable_auto_redirect = true,
 	};
 
