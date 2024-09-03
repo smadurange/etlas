@@ -50,7 +50,8 @@ def get_stock_prices():
 		s_date = (date - timedelta(days=90)).strftime("%Y-%m-%d")
 
 		base = "https://api.polygon.io/v2/aggs/ticker"
-		url = f"{base}/{ticker}/range/1/day/{s_date}/{e_date}?adjusted=true&sort=asc&apiKey={api_key}"
+		query = f"adjusted=true&sort=asc&apiKey={api_key}"
+		url = f"{base}/{ticker}/range/1/day/{s_date}/{e_date}?{query}"
 
 		res = requests.get(url)
 
@@ -58,11 +59,13 @@ def get_stock_prices():
 
 		if res.status_code == 200:
 			data = res.json()
-			for item in data["results"]:
-				result += f"{item['c']:.2f}\n"
-			ts[ticker] = result
-
-			n = (n + 1) % len(tickers)
+			try:
+				for item in data["results"]:
+					result += f"{item['c']:.2f}\n"
+				ts[ticker] = result
+				n = (n + 1) % len(tickers)
+			except:
+				print(res.text)
 
 		return Response(result, status=res.status_code, mimetype="text/plain")
 
