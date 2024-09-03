@@ -153,22 +153,6 @@ void stock_get_data(struct stock_data *sd)
 	esp_err_t rc;
 	char *buf = NULL;
 
-	esp_http_client_set_user_data(http_client, &buf);	
-
-	for(;;) {
-		rc = esp_http_client_perform(http_client);
-		if (rc != ESP_ERR_HTTP_EAGAIN)
-			break;
-
-		vTaskDelay((TickType_t) 100 / portTICK_PERIOD_MS);
-	}
-
-	parse(buf, sd);
-	free(buf);
-}
-
-void stock_init(void)
-{
 	esp_http_client_config_t conf = {
 		.url = CONFIG_STOCK_API_URL,
 		.is_async = true,
@@ -180,4 +164,20 @@ void stock_init(void)
 	};
 
 	http_client = esp_http_client_init(&conf);
+	esp_http_client_set_user_data(http_client, &buf);	
+
+	for(;;) {
+		rc = esp_http_client_perform(http_client);
+		if (rc != ESP_ERR_HTTP_EAGAIN)
+			break;
+
+		vTaskDelay((TickType_t) 100 / portTICK_PERIOD_MS);
+	}
+
+	parse(buf, sd);
+
+	free(buf);
+	ESP_ERROR_CHECK(esp_http_client_cleanup(http_client));	
+	http_client = NULL;
 }
+

@@ -13,8 +13,6 @@ struct stock_data {
 	int prices_maxlen;
 };
 
-void stock_init(void);
-
 void stock_get_data(struct stock_data *sd);
 
 #endif /* STOCK_H */
