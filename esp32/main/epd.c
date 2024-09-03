@@ -113,7 +113,9 @@ static inline void wait_until_idle(void)
 
 	ESP_LOGI(TAG, "display busy...");
 	do {
-		vTaskDelay((TickType_t) 20 / portTICK_PERIOD_MS);
+		// triggers watchdog timer, but this was the only way to
+		// get this working
+		// vTaskDelay((TickType_t) 20 / portTICK_PERIOD_MS);
 		send_cmd(0x71);
 		busy = gpio_get_level(EPD_BUSY_PIN);
 	} while (busy == 0);
