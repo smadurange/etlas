@@ -65,7 +65,7 @@ def get_stock_prices():
 				if len(ts) == 1:
 					updated = datetime.now()
 
-				n = (n + 1) % len(tickers)
+			n = (n + 1) % len(tickers)
 
 		return Response(result, status=res.status_code, mimetype="text/plain")
 
