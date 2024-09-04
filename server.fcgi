@@ -31,18 +31,16 @@ ts = {}
 mtx = Lock()
 tickers = get_tickers()
 updated = datetime.now()
-update_interval = 60 * 15
 
 @app.route("/prices")
 def get_stock_prices():
-	global n
+	global n, updated
 
 	with mtx:
 		ticker = tickers[n]["name"]
 		price = tickers[n]["price"]
 
-		if ticker in ts and updated + timedelta(seconds=update_interval) < datetime.now():
-			print("from cache " + tick)
+		if ticker in ts and updated + timedelta(hours=12) < datetime.now():
 			return Response(prices[ticker], status=res.status_code, mimetype="text/plain")
 
 		date = datetime.today()
@@ -59,13 +57,15 @@ def get_stock_prices():
 
 		if res.status_code == 200:
 			data = res.json()
-			try:
+			if "results" in data:
 				for item in data["results"]:
 					result += f"{item['c']:.2f}\n"
 				ts[ticker] = result
+
+				if len(ts) == 1:
+					updated = datetime.now()
+
 				n = (n + 1) % len(tickers)
-			except:
-				print(res.text)
 
 		return Response(result, status=res.status_code, mimetype="text/plain")
 
