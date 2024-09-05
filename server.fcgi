@@ -41,7 +41,7 @@ def get_stock_prices():
 		price = tickers[n]["price"]
 
 		if ticker in ts and updated + timedelta(hours=12) < datetime.now():
-			return Response(prices[ticker], status=res.status_code, mimetype="text/plain")
+			return Response(ts[ticker], status=res.status_code, mimetype="text/plain")
 
 		date = datetime.today()
 		e_date = date.strftime("%Y-%m-%d")
