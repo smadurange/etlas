@@ -37,6 +37,14 @@ def get_stock_prices():
 
 	with mtx:
 		tickers = get_tickers()
+
+		if len(tickers) == 0:
+			return Response("", status=204, mimetype="text/plain")
+
+		# tickers have been deleted from config
+		if n > len(tickers) - 1:
+			n = 0
+
 		ticker = tickers[n]["name"]
 		price = tickers[n]["price"]
 
