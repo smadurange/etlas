@@ -29,7 +29,6 @@ def get_tickers():
 n = 0
 ts = {}
 mtx = Lock()
-tickers = get_tickers()
 updated = datetime.now()
 
 @app.route("/prices")
@@ -37,6 +36,7 @@ def get_stock_prices():
 	global n, updated
 
 	with mtx:
+		tickers = get_tickers()
 		ticker = tickers[n]["name"]
 		price = tickers[n]["price"]
 
