@@ -10,7 +10,7 @@ to deploy Atlas to an OpenBSD server using httpd.
   5. Start FastCGI server: $ nohup python3 $HOME/etlas/server.fcgi &
   6. Change ownership of /var/www/run/etlas.sock to www:
      # chown www /var/www/run/etlas.sock
-     # chgrp www /var/www/run/3tlas.sock
+     # chgrp www /var/www/run/etlas.sock
   7. Configure httpd (see scripts/httpd.conf for a template).
   8. Create API user:
      # mkdir /var/www/htdocs/etlas
