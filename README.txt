@@ -5,9 +5,9 @@ to deploy Atlas to an OpenBSD server using httpd.
 
   1. Install flask, flup, and requests Python packages. 
   2. Create directory $HOME/etlas.
-  3. Copy server.fcgi and tickers.txt to $HOME/etlas.
+  3. Copy server.fcgi and tickers.txt to a directory called etlas.
   4. Set the POLYGON_API_KEY environment variable.
-  5. Start FastCGI server: $ nohup python3 $HOME/etlas/server.fcgi &
+  5. Start FastCGI server: $ nohup python3 server.fcgi &
   6. Change ownership of /var/www/run/etlas.sock to www:
      # chown www /var/www/run/etlas.sock
      # chgrp www /var/www/run/etlas.sock

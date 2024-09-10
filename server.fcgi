@@ -11,11 +11,19 @@ from flask import Flask, request, Response
 app = Flask(__name__)
 api_key = os.environ["POLYGON_API_KEY"]
 
+log_file = "etlas.log"
+
 def get_tickers():
 	tab = []
 
 	with open("tickers.txt", "r") as f:
-		lines = f.read().split('\n')
+		raw = f.read()
+		
+		with open(log_file, "a") as log:
+			log.write(raw)
+
+		lines = raw.split('\n')
+
 		for line in lines:
 			if line:
 				parts = line.split()
@@ -27,9 +35,7 @@ def get_tickers():
 	return tab
 
 n = 0
-ts = {}
 mtx = Lock()
-updated = datetime.now()
 
 @app.route("/prices")
 def get_stock_prices():
@@ -48,9 +54,6 @@ def get_stock_prices():
 		ticker = tickers[n]["name"]
 		price = tickers[n]["price"]
 
-		if ticker in ts and updated + timedelta(hours=12) < datetime.now():
-			return Response(ts[ticker], status=res.status_code, mimetype="text/plain")
-
 		date = datetime.today()
 		e_date = date.strftime("%Y-%m-%d")
 		s_date = (date - timedelta(days=90)).strftime("%Y-%m-%d")
@@ -61,6 +64,10 @@ def get_stock_prices():
 
 		res = requests.get(url)
 
+		with open(log_file, "a") as log:
+			log.write("\n\n")
+			log.write(res.text)
+
 		result = f"{ticker}\n{price}\n"
 
 		if res.status_code == 200:
@@ -68,10 +75,6 @@ def get_stock_prices():
 			if "results" in data:
 				for item in data["results"]:
 					result += f"{item['c']:.2f}\n"
-				ts[ticker] = result
-
-				if len(ts) == 1:
-					updated = datetime.now()
 
 			n = (n + 1) % len(tickers)
 
@@ -79,7 +82,7 @@ def get_stock_prices():
 
 if __name__ == '__main__':
     from flup.server.fcgi import WSGIServer
-    sock = Path('/var/www/run/atlas.sock').resolve()
+    sock = Path('/var/www/run/etlas.sock').resolve()
     try:
         sock.unlink()
     except:
