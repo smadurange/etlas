@@ -19,7 +19,7 @@ def get_tickers():
 	with open("tickers.txt", "r") as f:
 		raw = f.read()
 		
-		with open(log_file, "a") as log:
+		with open(log_file, "w") as log:
 			log.write(raw)
 
 		lines = raw.split('\n')
